@@ -16,7 +16,13 @@
 </head>
 <body>
 	<table>
-		<tr><th>Animation in</th><th>Animation out</th><th>Background color</th><th>Animations can be found <a href="https://daneden.github.io/animate.css/">here</a></tr>
+		<tr>
+			<td><a style="font-size:20px;" href="https://www.github.com/onixion/hades.git">HADES version 1.0</a></td>
+			<td><button class="button_delete" onclick="window.location.href='/logout'">LOGOUT</button></td>
+		</tr>
+	</table>
+	<table>
+		<tr><th>Animation in</th><th>Animation out (<a style="cursor:pointer;text-decoration:underline;" onclick="window.open('https://daneden.github.io/animate.css/');">other</a>)</th><th>Background color</th><th></th></tr>
 		<tr>
 			<form method="POST" action="/pages/animation">
 				{% csrf_token %}
@@ -64,6 +70,5 @@
 		<tr><th>Preview</th></tr>
 		<tr><td><iframe style="height:1080px;width:1920px;" src="/"></iframe></td></tr>
 	</table>
-	<a style="font-size:10px;" href="https://www.github.com/onixion/hades.git">HADES version 1.0</a>
 </body>
 </html>	

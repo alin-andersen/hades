@@ -5,6 +5,7 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login, logout
 
 from . import settings
 from . import models
@@ -13,6 +14,36 @@ from . import models
 background_color = "ffffff"
 animation_in     = "fadeInDown"
 animation_out    = "fadeOutDown"
+
+@require_http_methods(['GET','POST'])
+def page_login(request):
+	if request.method == 'GET':
+		if request.user.is_authenticated():
+			if request.GET.get('next') is not None:
+				return redirect(request.GET.get('next'))
+			return redirect('/pages')
+
+		return TemplateResponse(request,'login.html')
+
+	user = authenticate(
+		username=request.POST['username'],
+		password=request.POST['password'])
+
+	if user is None:
+		return TemplateResponse(request,'login.html')
+	
+	login(request,user)
+
+	if request.GET.get('next') is not None:
+		return redirect(request.GET.get('next'))
+	return redirect('/pages')
+
+@require_http_methods(['GET'])
+@login_required(login_url='/login')
+def page_logout(request):
+	if request.user.is_authenticated:
+		logout(request)
+	return redirect('/')
 
 @require_http_methods(['GET'])
 def page_index(request):
@@ -58,7 +89,7 @@ def page_image(request,uuid):
 	return FileResponse(open(path,'rb'),content_type='image/jpeg')
 
 @require_http_methods(['GET','POST'])
-@login_required(login_url='/admin/')
+@login_required(login_url='/login')
 def page_pages(request):
 	if request.method == 'POST':
 		page = models.Page.objects.filter(uuid=request.POST['uuid']).first()
@@ -80,7 +111,7 @@ def page_pages(request):
 		'animation_in':animation_in,'animation_out':animation_out})
 
 @require_http_methods(['POST'])
-@login_required(login_url='/admin/')
+@login_required(login_url='/login')
 def page_pages_new(request):
 	page = models.Page()
 	page.order = request.POST['order']
@@ -99,7 +130,7 @@ def page_pages_new(request):
 	return redirect('/pages')
 
 @require_http_methods(['GET'])
-@login_required(login_url='/admin/')
+@login_required(login_url='/login')
 def page_page_delete(request,uuid):
 	page = models.Page.objects.filter(uuid=uuid).first()
 	if page is not None:
@@ -110,7 +141,7 @@ def page_page_delete(request,uuid):
 	return redirect('/pages')
 
 @require_http_methods(['POST'])
-@login_required(login_url='/admin/')
+@login_required(login_url='/login')
 def	page_pages_animation(request):
 	global background_color
 	global animation_in

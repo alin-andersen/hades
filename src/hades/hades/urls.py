@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^next$', views.page_next),
     url(r'^image/(?P<uuid>[a-f0-9\-]+)$', views.page_image),
     
+    url(r'^login$', views.page_login),
+    url(r'^logout$', views.page_logout),
     url(r'^pages$', views.page_pages),
     url(r'^pages/new$', views.page_pages_new),
     url(r'^pages/animation$', views.page_pages_animation),
