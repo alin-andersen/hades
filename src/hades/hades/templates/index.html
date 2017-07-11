@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="/static/css/animate.css">
+	<link rel="stylesheet" href="/static/css/reset.css">
+	<script src="/static/js/jquery-3.2.1.min.js"></script>
+	<script src="/static/js/js-cookie.js"></script>
+</head>
+<body id="body" style="background-color:#ffffff;overflow:hidden;">
+
+</body>
+<script>
+
+var span;
+var csrftoken     = Cookies.get('csrftoken');
+
+//var animation_in  = 'animated fadeIn';
+//var animation_out = 'animated fadeOut';
+
+var animation_in  = 'animated fadeInLeft';
+var animation_out = 'animated fadeOutRight';
+
+$(document).ready(function(){
+	page_next();
+});
+
+function page_next() {
+	$('#body').empty();
+	$.ajax({
+		url: '/next',
+		method:'POST',
+		success: function(data,status){
+			if(data.status == "success"){
+				console.log("next");
+				html = "<img src='/image/"+data.uuid+"' style='height:100%;'></img>";
+				$('#body').append(html);
+				span = data.span * 1000;
+
+				$('#body').addClass(animation_in);
+				setTimeout(function(){
+					$('#body').removeClass(animation_in);
+					setTimeout(function(){
+						$('#body').addClass(animation_out);
+						setTimeout(function(){
+							$('#body').removeClass(animation_out);
+							page_next();
+						}, 1000);
+					}, span);
+				}, 1000);
+			}
+			else { setTimeout(page_next, 250); }
+		},
+	});
+}
+
+function csrfSafeMethod(method) {
+	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+	beforeSend: function(xhr, settings) {
+		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		}
+	}
+});
+
+</script>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+	td{ border: 1px solid black; padding: 5px; }
+	th{ border: 1px solid black; padding: 5px; }
+	</style>
+</head>
+<body>
+<table>
+<tr><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th></tr>
+<tr>
+<form method="POST" action="/pages/new" enctype="multipart/form-data">
+	{% csrf_token %}
+	<td><input type="number" required min="0" value="0"  name="order"></td>
+	<td><input type="number" required min="0" value="10" name="span"></td>
+	<td><input type="file" required name="file"></td>
+	<td><input type="submit" value="Create Page"></td>
+</form>
+</tr>
+</table>
+<div style="height:20px;"></div>
+{% if pages %}
+<table>
+<tr><th>UUID</th><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th><th></th></tr>
+{% for page in pages %}
+<tr>
+<form method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+	<td><input type="text"  required readonly value="{{page.uuid}}"  name="uuid"></td>
+	<td><input type="number" required min="0" value="{{page.order}}" name="order"></td>
+	<td><input type="number" requred min="0" value="{{page.span}}"  name="span"></td>
+	<td>
+		<img src="/image/{{page.uuid}}" style="height:50px;width:50px;">
+		<input type="file" name="file">
+	</td>
+	<td><input type="submit" value="Save"></td>
+	<td><button type="button" onclick="window.location.href='/page/delete/{{page.uuid}}'">Delete</button></td>
+</form>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+</body>
+<script>
+</script>
+</html>	
