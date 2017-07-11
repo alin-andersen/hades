@@ -8,7 +8,7 @@
 	<script src="/static/js/jquery-3.2.1.min.js"></script>
 	<script src="/static/js/js-cookie.js"></script>
 </head>
-<body id="body" onclick="window.location.href='/login'" style="background-color:#ffffff;overflow:hidden;">
+<body id="body" onclick="window.location.href='/login'" style="background-color:#ffffff;overflow:hidden;cursor:none;">
 </body>
 
 <script>
@@ -18,7 +18,9 @@ var csrftoken = Cookies.get('csrftoken');
 var span;
 var background_color;
 var animation_in;
+var timespan_in;
 var animation_out;
+var timespan_out;
 
 //var animation_in  = 'animated fadeInLeft';
 //var animation_out = 'animated fadeOutRight';
@@ -37,11 +39,15 @@ function page_next() {
 				html = "<img src='/image/"+data.uuid+"' style='height:100%;'></img>";
 				$('#body').append(html);
 
-				span = data.span * 1000;
-
+				span = data.span;
 				background_color = data.background_color;
-				animation_in = data.animation_in;
+				animation_in  = data.animation_in;
+				timespan_in   = data.timespan_in;
 				animation_out = data.animation_out;
+				timespan_out  = data.timespan_out;
+
+				console.log(timespan_in)
+				console.log(timespan_out)
 
 				$('#body').css('background-color',background_color);
 
@@ -53,9 +59,9 @@ function page_next() {
 						setTimeout(function(){
 							$('#body').removeClass(animation_out);
 							page_next();
-						}, 1000);
+						}, timespan_out);
 					}, span);
-				}, 1000);
+				}, timespan_in);
 			}
 			else { setTimeout(page_next, 1000); }
 		},

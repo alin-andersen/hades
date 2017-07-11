@@ -5,7 +5,7 @@
 	<style>
 	body  { background-color: #323232; color: #ffffff;}
 	a     { color: #ffffff;}
-	table, th, td { border: 5px solid #ffffff; padding: 5px; border-collapse: collapse; }
+	table, th, td { border: 5px solid #ffffff; border-collapse: collapse; padding: 5px; text-align: center; }
 	table { margin-bottom: 20px; box-shadow: 0px 0px 10px 0px #ffffff;}
 	input { padding: 5px; }
 	.button_save        { background-color: #00ff00; color: #000000;}
@@ -17,49 +17,53 @@
 <body>
 	<table>
 		<tr>
-			<td><a style="font-size:20px;" href="https://www.github.com/onixion/hades.git">HADES version 1.0</a></td>
+			<td><a style="font-size:20px;" href="https://www.github.com/onixion/hades.git">HADES version 1.2</a></td>
 			<td><button class="button_delete" onclick="window.location.href='/logout'">LOGOUT</button></td>
 		</tr>
 	</table>
 	<table>
-		<tr><th>Animation in</th><th>Animation out (<a style="cursor:pointer;text-decoration:underline;" onclick="window.open('https://daneden.github.io/animate.css/');">other</a>)</th><th>Background color</th><th></th></tr>
 		<tr>
-			<form method="POST" action="/pages/animation">
+			<th>Animation in</th>
+			<th>Timespan in (in ms)</th>
+			<th>Animation out (<a style="cursor:pointer;text-decoration:underline;" onclick="window.open('https://daneden.github.io/animate.css/');">other</a>)</th>
+			<th>Timespan out (in ms)</th>
+			<th>Background color</th></tr>
+		<tr>
+			<form method="POST" action="/pages/config">
 				{% csrf_token %}
-				<td><input type="text" required value="{{animation_in}}"  name="animation_in"></td>
-				<td><input type="text" required value="{{animation_out}}" name="animation_out"></td>
-				<td><input type="text" class="jscolor" required value="{{background_color}}" name="background_color"></td>
-				<td><input type="submit" class="button_save"  value="Save"></td>
+				<td><input type="text" required value="{{animation_in}}" name="animation_in" onchange="this.form.submit();"></td>
+				<td><input type="number" required min="0" value="{{timespan_in}}" name="timespan_in" onchange="this.form.submit();"></td>
+				<td><input type="text" required value="{{animation_out}}" name="animation_out" onchange="this.form.submit();"></td>
+				<td><input type="number" required min="0" value="{{timespan_out}}" name="timespan_out" onchange="this.form.submit();"></td>
+				<td><input type="text" class="jscolor" required value="{{background_color}}" name="background_color" onchange="this.form.submit();"></td>
 			</form>
 		</tr>
 	</table>
 	<table>
-		<tr><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th></tr>
+		<tr><th>Order</th><th>Timespan (in ms)</th><th>Image(s)</th><th></th></tr>
 		<tr>
 			<form method="POST" action="/pages/new" enctype="multipart/form-data">
 				{% csrf_token %}
 				<td><input type="number" required min="0" value="0"  name="order"></td>
-				<td><input type="number" required min="0" value="10" name="span"></td>
-				<td><input type="file" required name="file"></td>
+				<td><input type="number" required min="0" value="10000" name="span"></td>
+				<td><input type="file" required name="files" multiple></td>
 				<td><input type="submit" class="button_save" value="Save"></td>
 			</form>
 		</tr>
 	</table>
 	{% if pages %}
 	<table>
-		<tr><th>UUID</th><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th><th></th></tr>
+		<tr><th>Order</th><th>Timespan (in ms)</th><th>Image</th><th></th></tr>
 		{% for page in pages %}
 		<tr>
 			<form method="POST" enctype="multipart/form-data">
 				{% csrf_token %}
-				<td><input type="text"  required readonly value="{{page.uuid}}"  name="uuid"></td>
-				<td><input type="number" required min="0" value="{{page.order}}" name="order"></td>
-				<td><input type="number" requred min="0" value="{{page.span}}"  name="span"></td>
+				<td><input type="number" required min="0" value="{{page.order}}" name="order" onchange="this.form.submit();"></td>
+				<td><input type="number" requred min="0" value="{{page.span}}"  name="span" onchange="this.form.submit();"></td>
 				<td>
 					<img src="/image/{{page.uuid}}" style="cursor:pointer;height:54px;width:96px;" onclick="window.open('/image/{{page.uuid}}');">
-					<input type="file" name="file">
+					<input type="file" name="file" onchange="this.form.submit();">
 				</td>
-				<td><input type="submit" class="button_save" value="Save"></td>
 				<td><button class="button_delete" type="button" onclick="window.location.href='/page/delete/{{page.uuid}}'">Delete</button></td>
 			</form>
 		</tr>

@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^logout$', views.page_logout),
     url(r'^pages$', views.page_pages),
     url(r'^pages/new$', views.page_pages_new),
-    url(r'^pages/animation$', views.page_pages_animation),
+    url(r'^pages/config$', views.page_pages_config),
 
     url(r'^page/delete/(?P<uuid>[a-f0-9\-]+)$', views.page_page_delete),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
