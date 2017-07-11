@@ -9,18 +9,19 @@
 	<script src="/static/js/js-cookie.js"></script>
 </head>
 <body id="body" style="background-color:#ffffff;overflow:hidden;">
-
 </body>
+
 <script>
 
+var csrftoken = Cookies.get('csrftoken');
+
 var span;
-var csrftoken     = Cookies.get('csrftoken');
+var background_color;
+var animation_in;
+var animation_out;
 
-//var animation_in  = 'animated fadeIn';
-//var animation_out = 'animated fadeOut';
-
-var animation_in  = 'animated fadeInLeft';
-var animation_out = 'animated fadeOutRight';
+//var animation_in  = 'animated fadeInLeft';
+//var animation_out = 'animated fadeOutRight';
 
 $(document).ready(function(){
 	page_next();
@@ -33,10 +34,16 @@ function page_next() {
 		method:'POST',
 		success: function(data,status){
 			if(data.status == "success"){
-				console.log("next");
 				html = "<img src='/image/"+data.uuid+"' style='height:100%;'></img>";
 				$('#body').append(html);
+
 				span = data.span * 1000;
+
+				background_color = data.background_color;
+				animation_in = data.animation_in;
+				animation_out = data.animation_out;
+
+				$('#body').css('background-color',background_color);
 
 				$('#body').addClass(animation_in);
 				setTimeout(function(){
@@ -50,7 +57,10 @@ function page_next() {
 					}, span);
 				}, 1000);
 			}
-			else { setTimeout(page_next, 250); }
+			else { setTimeout(page_next, 1000); }
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			setTimeout(page_next, 1000);
 		},
 	});
 }

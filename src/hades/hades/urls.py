@@ -24,7 +24,10 @@ urlpatterns = [
     url(r'^$', views.page_index),
     url(r'^next$', views.page_next),
     url(r'^image/(?P<uuid>[a-f0-9\-]+)$', views.page_image),
+    
     url(r'^pages$', views.page_pages),
     url(r'^pages/new$', views.page_pages_new),
+    url(r'^pages/animation$', views.page_pages_animation),
+
     url(r'^page/delete/(?P<uuid>[a-f0-9\-]+)$', views.page_page_delete),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

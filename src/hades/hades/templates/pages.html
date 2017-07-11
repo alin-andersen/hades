@@ -1,47 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script src="/static/js/jscolor.min.js"></script>
 	<style>
-	td{ border: 1px solid black; padding: 5px; }
-	th{ border: 1px solid black; padding: 5px; }
+	body  { background-color: #323232; color: #ffffff;}
+	a     { color: #ffffff;}
+	table, th, td { border: 5px solid #ffffff; padding: 5px; border-collapse: collapse; }
+	table { margin-bottom: 20px; box-shadow: 0px 0px 10px 0px #ffffff;}
+	input { padding: 5px; }
+	.button_save        { background-color: #00ff00; color: #000000;}
+	.button_save:hover  { background-color: #ffffff; color: #00ff00;}
+	.button_delete      { background-color: #ff0000; color: #000000;}
+	.button_delete:hover{ background-color: #ffffff; color: #ff0000;}
 	</style>
 </head>
 <body>
-<table>
-<tr><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th></tr>
-<tr>
-<form method="POST" action="/pages/new" enctype="multipart/form-data">
-	{% csrf_token %}
-	<td><input type="number" required min="0" value="0"  name="order"></td>
-	<td><input type="number" required min="0" value="10" name="span"></td>
-	<td><input type="file" required name="file"></td>
-	<td><input type="submit" value="Create Page"></td>
-</form>
-</tr>
-</table>
-<div style="height:20px;"></div>
-{% if pages %}
-<table>
-<tr><th>UUID</th><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th><th></th></tr>
-{% for page in pages %}
-<tr>
-<form method="POST" enctype="multipart/form-data">
-	{% csrf_token %}
-	<td><input type="text"  required readonly value="{{page.uuid}}"  name="uuid"></td>
-	<td><input type="number" required min="0" value="{{page.order}}" name="order"></td>
-	<td><input type="number" requred min="0" value="{{page.span}}"  name="span"></td>
-	<td>
-		<img src="/image/{{page.uuid}}" style="height:50px;width:50px;">
-		<input type="file" name="file">
-	</td>
-	<td><input type="submit" value="Save"></td>
-	<td><button type="button" onclick="window.location.href='/page/delete/{{page.uuid}}'">Delete</button></td>
-</form>
-</tr>
-{% endfor %}
-</table>
-{% endif %}
+	<table>
+		<tr><th>Animation in</th><th>Animation out</th><th>Background color</th><th>Animations can be found <a href="https://daneden.github.io/animate.css/">here</a></tr>
+		<tr>
+			<form method="POST" action="/pages/animation">
+				{% csrf_token %}
+				<td><input type="text" required value="{{animation_in}}"  name="animation_in"></td>
+				<td><input type="text" required value="{{animation_out}}" name="animation_out"></td>
+				<td><input type="text" class="jscolor" required value="{{background_color}}" name="background_color"></td>
+				<td><input type="submit" class="button_save"  value="Save"></td>
+			</form>
+		</tr>
+	</table>
+	<table>
+		<tr><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th></tr>
+		<tr>
+			<form method="POST" action="/pages/new" enctype="multipart/form-data">
+				{% csrf_token %}
+				<td><input type="number" required min="0" value="0"  name="order"></td>
+				<td><input type="number" required min="0" value="10" name="span"></td>
+				<td><input type="file" required name="file"></td>
+				<td><input type="submit" class="button_save" value="Save"></td>
+			</form>
+		</tr>
+	</table>
+	{% if pages %}
+	<table>
+		<tr><th>UUID</th><th>Order</th><th>Timespan (in seconds)</th><th>Image</th><th></th><th></th></tr>
+		{% for page in pages %}
+		<tr>
+			<form method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				<td><input type="text"  required readonly value="{{page.uuid}}"  name="uuid"></td>
+				<td><input type="number" required min="0" value="{{page.order}}" name="order"></td>
+				<td><input type="number" requred min="0" value="{{page.span}}"  name="span"></td>
+				<td>
+					<img src="/image/{{page.uuid}}" style="cursor:pointer;height:54px;width:96px;" onclick="window.open('/image/{{page.uuid}}');">
+					<input type="file" name="file">
+				</td>
+				<td><input type="submit" class="button_save" value="Save"></td>
+				<td><button class="button_delete" type="button" onclick="window.location.href='/page/delete/{{page.uuid}}'">Delete</button></td>
+			</form>
+		</tr>
+		{% endfor %}
+	</table>
+	{% endif %}
+	<table>
+		<tr><th>Preview</th></tr>
+		<tr><td><iframe style="height:1080px;width:1920px;" src="/"></iframe></td></tr>
+	</table>
+	<a style="font-size:10px;" href="https://www.github.com/onixion/hades.git">HADES version 1.0</a>
 </body>
-<script>
-</script>
 </html>	
