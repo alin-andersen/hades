@@ -30,15 +30,13 @@ $(document).ready(function(){
 });
 
 function page_next() {
-	$('#body').empty();
 	$.ajax({
 		url: '/next',
 		method:'POST',
 		success: function(data,status){
 			if(data.status == "success"){
-				html = "<img src='/image/"+data.uuid+"' style='height:100%;'></img>";
-				$('#body').append(html);
-
+				
+				// get config
 				span = data.span;
 				background_color = data.background_color;
 				animation_in  = data.animation_in;
@@ -46,18 +44,23 @@ function page_next() {
 				animation_out = data.animation_out;
 				timespan_out  = data.timespan_out;
 
-				console.log(timespan_in)
-				console.log(timespan_out)
-
+				// set image and background
+				html = "<img src='/image/"+data.uuid+"' style='height:100%;'></img>";
+				$('#body').prepend(html);
 				$('#body').css('background-color',background_color);
-
-				$('#body').addClass(animation_in);
+				$('#body').css('background-image',"url('/image/background')");
+				$('#body').css('background-repeat','no-repeat');
+				$('#body').css('background-size','1920px 1080px');
+				var obj = $('#body').children().first();
+				
+				obj.addClass(animation_in);
 				setTimeout(function(){
-					$('#body').removeClass(animation_in);
+					obj.removeClass(animation_in);
 					setTimeout(function(){
-						$('#body').addClass(animation_out);
+						obj.addClass(animation_out);
 						setTimeout(function(){
-							$('#body').removeClass(animation_out);
+							obj.removeClass(animation_out);
+							$('#body').empty();
 							page_next();
 						}, timespan_out);
 					}, span);

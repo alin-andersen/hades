@@ -24,12 +24,14 @@ urlpatterns = [
     url(r'^$', views.page_index),
     url(r'^next$', views.page_next),
     url(r'^image/(?P<uuid>[a-f0-9\-]+)$', views.page_image),
-    
+    url(r'^image/background$', views.page_image_background),
+
     url(r'^login$', views.page_login),
     url(r'^logout$', views.page_logout),
     url(r'^pages$', views.page_pages),
     url(r'^pages/new$', views.page_pages_new),
     url(r'^pages/config$', views.page_pages_config),
+    url(r'^pages/config/background/delete$', views.page_pages_config_background_delete),
 
     url(r'^page/delete/(?P<uuid>[a-f0-9\-]+)$', views.page_page_delete),
 ] + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

@@ -92,6 +92,13 @@ def page_image(request,uuid):
 		return FileResponse(open(settings.DEFAULT_IMAGE_PATH,'rb'),content_type='image/jpeg')
 	return FileResponse(open(path,'rb'),content_type='image/jpeg')
 
+@require_http_methods(['GET'])
+def page_image_background(request):
+	path = os.path.join(settings.IMAGES_PATH,"background.jpg")
+	if not os.path.isfile(path):
+		return HttpResponse(status=404)
+	return FileResponse(open(path,'rb'),content_type='image/jpeg')
+
 @require_http_methods(['GET','POST'])
 @login_required(login_url='/login')
 def page_pages(request):
@@ -183,6 +190,21 @@ def	page_pages_config(request):
 	if 'timespan_out' in request.POST:
 		timespan_out = request.POST['timespan_out']
 
-	print(request.POST)
+	if len(request.FILES.getlist('background_file')) != 0:
+		path = os.path.join(settings.IMAGES_PATH,'background.jpg')
+		if os.path.isfile(path):
+			os.remove(path)
+		with open(path,'wb+') as file:
+			for chunk in request.FILES.getlist('background_file')[0].chunks():
+				file.write(chunk)
+
+	return redirect('/pages')
+
+@require_http_methods(['GET'])
+@login_required(login_url='/login')
+def	page_pages_config_background_delete(request):
+	path = os.path.join(settings.IMAGES_PATH,'background.jpg')
+	if os.path.isfile(path):
+		os.remove(path)
 
 	return redirect('/pages')

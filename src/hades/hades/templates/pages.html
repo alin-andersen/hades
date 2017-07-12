@@ -3,7 +3,7 @@
 <head>
 	<script src="/static/js/jscolor.min.js"></script>
 	<style>
-	body  { background-color: #323232; color: #ffffff;}
+	body  { background-color: #323232; color: #ffffff; }
 	a     { color: #ffffff;}
 	table, th, td { border: 5px solid #ffffff; border-collapse: collapse; padding: 5px; text-align: center; }
 	table { margin-bottom: 20px; box-shadow: 0px 0px 10px 0px #ffffff;}
@@ -27,15 +27,22 @@
 			<th>Timespan in (in ms)</th>
 			<th>Animation out (<a style="cursor:pointer;text-decoration:underline;" onclick="window.open('https://daneden.github.io/animate.css/');">other</a>)</th>
 			<th>Timespan out (in ms)</th>
-			<th>Background color</th></tr>
+			<th>Background color</th>
+			<th>Background image</th>
+		</tr>
 		<tr>
-			<form method="POST" action="/pages/config">
+			<form method="POST" action="/pages/config" enctype="multipart/form-data">
 				{% csrf_token %}
 				<td><input type="text" required value="{{animation_in}}" name="animation_in" onchange="this.form.submit();"></td>
 				<td><input type="number" required min="0" value="{{timespan_in}}" name="timespan_in" onchange="this.form.submit();"></td>
 				<td><input type="text" required value="{{animation_out}}" name="animation_out" onchange="this.form.submit();"></td>
 				<td><input type="number" required min="0" value="{{timespan_out}}" name="timespan_out" onchange="this.form.submit();"></td>
 				<td><input type="text" class="jscolor" required value="{{background_color}}" name="background_color" onchange="this.form.submit();"></td>
+				<td>
+					<img src="/image/background" style="cursor:pointer;height:54px;width:96px;" onclick="window.open('/image/background');" onerror="this.style.display='none'">
+					<input type="file" name="background_file" onchange="this.form.submit();">
+					<button type="button" class="button_delete" onclick="window.location.href='/pages/config/background/delete'">Delete</button>
+				</td>
 			</form>
 		</tr>
 	</table>
