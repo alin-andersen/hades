@@ -65,6 +65,7 @@
 		<tr>
 			<form method="POST" enctype="multipart/form-data">
 				{% csrf_token %}
+				<input type="hidden" readonly value="{{page.uuid}}" name="uuid">
 				<td><input type="number" required min="0" value="{{page.order}}" name="order" onchange="this.form.submit();"></td>
 				<td><input type="number" requred min="0" value="{{page.span}}"  name="span" onchange="this.form.submit();"></td>
 				<td>
