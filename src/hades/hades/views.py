@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 
 from . import settings
 from . import models
@@ -17,6 +18,7 @@ timespan_in      = "1000"
 timespan_out     = "1000"
 animation_out    = "fadeOutDown"
 
+@csrf_exempt
 @require_http_methods(['GET','POST'])
 def page_login(request):
 	if request.method == 'GET':
@@ -40,6 +42,7 @@ def page_login(request):
 		return redirect(request.GET.get('next'))
 	return redirect('/pages')
 
+@csrf_exempt
 @require_http_methods(['GET'])
 @login_required(login_url='/login')
 def page_logout(request):
@@ -47,10 +50,12 @@ def page_logout(request):
 		logout(request)
 	return redirect('/')
 
+@csrf_exempt
 @require_http_methods(['GET'])
 def page_index(request):
 	return TemplateResponse(request,'index.html')
 
+@csrf_exempt
 @require_http_methods(['POST'])
 def page_next(request):
 
@@ -85,6 +90,7 @@ def page_next(request):
 		data['timespan_out']     = timespan_out
 	return JsonResponse(data)
 
+@csrf_exempt
 @require_http_methods(['GET'])
 def page_image(request,uuid):
 	path = os.path.join(settings.IMAGES_PATH, uuid+".jpg")
@@ -92,6 +98,7 @@ def page_image(request,uuid):
 		return FileResponse(open(settings.DEFAULT_IMAGE_PATH,'rb'),content_type='image/jpeg')
 	return FileResponse(open(path,'rb'),content_type='image/jpeg')
 
+@csrf_exempt
 @require_http_methods(['GET'])
 def page_image_background(request):
 	path = os.path.join(settings.IMAGES_PATH,"background.jpg")
@@ -99,6 +106,7 @@ def page_image_background(request):
 		return HttpResponse(status=404)
 	return FileResponse(open(path,'rb'),content_type='image/jpeg')
 
+@csrf_exempt
 @require_http_methods(['GET','POST'])
 @login_required(login_url='/login')
 def page_pages(request):
@@ -130,6 +138,7 @@ def page_pages(request):
 		'timespan_out':timespan_out,
 		})
 
+@csrf_exempt
 @require_http_methods(['POST'])
 @login_required(login_url='/login')
 def page_pages_new(request):
@@ -155,6 +164,7 @@ def page_pages_new(request):
 
 	return redirect('/pages')
 
+@csrf_exempt
 @require_http_methods(['GET'])
 @login_required(login_url='/login')
 def page_page_delete(request,uuid):
@@ -166,6 +176,7 @@ def page_page_delete(request,uuid):
 			os.remove(path)
 	return redirect('/pages')
 
+@csrf_exempt
 @require_http_methods(['POST'])
 @login_required(login_url='/login')
 def	page_pages_config(request):
@@ -200,6 +211,7 @@ def	page_pages_config(request):
 
 	return redirect('/pages')
 
+@csrf_exempt
 @require_http_methods(['GET'])
 @login_required(login_url='/login')
 def	page_pages_config_background_delete(request):
