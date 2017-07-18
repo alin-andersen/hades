@@ -45,7 +45,7 @@ function page_next() {
 				timespan_out  = data.timespan_out;
 
 				// set image and background
-				html = "<img src='/image/"+data.uuid+"' style='height:1080px;width:1920px;'></img>";
+				html = "<img src='/image/"+data.uuid+"' style='height:100%;width:100%;'></img>";
 				$('#body').prepend(html);
 				$('#body').css('background-color',background_color);
 				$('#body').css('background-image',"url('/image/background')");
