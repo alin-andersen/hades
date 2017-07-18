@@ -1,0 +1,20 @@
+
+# auto login
+
+systemctl edit getty@tty1
+
+/etc/systemd/system/getty@tty1.service.d/override.conf
+
+[Service]
+ExecStart=
+ExecStart=-/usr/bin/agetty --autologin username --noclear %I $TERM
+
+# auto startx
+
+if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
+  exec startx
+fi
+
+# startx
+
+exec chromium ...
