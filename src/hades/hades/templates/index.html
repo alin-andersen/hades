@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html style="height:100%;width:100%;margin:0;padding:0;overflow:hidden;">
 <head>
 	<title></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">-->
 	<link rel="stylesheet" href="/static/css/animate.css">
 	<link rel="stylesheet" href="/static/css/reset.css">
 	<script src="/static/js/jquery-3.2.1.min.js"></script>
 	<script src="/static/js/js-cookie.js"></script>
 </head>
-<body id="body" onclick="window.location.href='/login'" style="background-color:#ffffff;overflow:hidden;cursor:none;">
+<body id="body" onclick="window.location.href='/login'" style="height:100%;width:100%;margin:0;padding:0;overflow:hidden;">
 </body>
 
 <script>
@@ -31,7 +31,7 @@ $(document).ready(function(){
 
 function page_next() {
 	$.ajax({
-		url: '/next',
+		url: '/next/',
 		method:'POST',
 		success: function(data,status){
 			if(data.status == "success"){
@@ -45,16 +45,13 @@ function page_next() {
 				timespan_out  = data.timespan_out;
 
 				// set image and background
-				html = "<img src='/image/"+data.uuid+"' style='height:100%;width:100%;'></img>";
-				$('#body').prepend(html);
-				$('#body').css('background-color',background_color);
-				$('#body').css('background-image',"url('/image/background')");
-				$('#body').css('background-repeat','no-repeat');
-				$('#body').css('background-size','100% 100%');
-				$('#body').css('width','100%');
-				$('#body').css('height','100%');
-				var obj = $('#body').children().first();
+				html = "<img src='/image/"+data.uuid+"/' style='height:100%;width:100%;margin:0;'></img>";
+				$('#body').append(html);
 				
+				$('#body').css("background-color",background_color);
+
+				var obj = $('#body').children().first();
+
 				obj.addClass(animation_in);
 				setTimeout(function(){
 					obj.removeClass(animation_in);

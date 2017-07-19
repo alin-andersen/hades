@@ -11,12 +11,16 @@ from django.views.decorators.csrf import csrf_exempt
 from . import settings
 from . import models
 
-# default settings
-background_color = "ffffff"
-animation_in     = "fadeInDown"
-timespan_in      = "1000"
-timespan_out     = "1000"
-animation_out    = "fadeOutDown"
+def settings_check():
+	settings = models.Setting.objects.all().first()
+	if settings is None:
+		settings = models.Setting()
+		settings.background_color = "ffffff"
+		settings.animation_in = "animated fadeIn"
+		settings.timespan_in = 1000
+		settings.animation_out = "animated fadeOut"
+		settings.timespan_out = 1000
+		settings.save()
 
 @csrf_exempt
 @require_http_methods(['GET','POST'])
@@ -83,17 +87,22 @@ def page_next(request):
 		data['status'] = 'success'
 		data['uuid'] = page.uuid
 		data['span'] = page.span
-		data['background_color'] = '#' + background_color
-		data['animation_in']     = 'animated ' + animation_in
-		data['timespan_in']      = timespan_in
-		data['animation_out']    = 'animated ' + animation_out
-		data['timespan_out']     = timespan_out
+
+		settings_check()
+		settings = models.Setting.objects.all().first()
+		data['background_color'] = settings.background_color
+		data['animation_in']     = settings.animation_in
+		data['timespan_in']      = settings.timespan_in
+		data['animation_out']    = settings.animation_out
+		data['timespan_out']     = settings.timespan_out
+
 	return JsonResponse(data)
 
 @csrf_exempt
 @require_http_methods(['GET'])
 def page_image(request,uuid):
 	path = os.path.join(settings.IMAGES_PATH, uuid+".jpg")
+	print(path)
 	if not os.path.isfile(path):
 		return FileResponse(open(settings.DEFAULT_IMAGE_PATH,'rb'),content_type='image/jpeg')
 	return FileResponse(open(path,'rb'),content_type='image/jpeg')
@@ -129,13 +138,13 @@ def page_pages(request):
 						file.write(chunk)
 
 	pages = models.Page.objects.all().order_by('order')
+
+	settings_check()
+	settings = models.Setting.objects.all().first()
+
 	return TemplateResponse(request,'pages.html',{
 		'pages':pages,
-		'background_color':background_color,
-		'animation_in':animation_in,
-		'timespan_in':timespan_in,
-		'animation_out':animation_out,
-		'timespan_out':timespan_out,
+		'settings':settings,
 		})
 
 @csrf_exempt
@@ -186,20 +195,25 @@ def	page_pages_config(request):
 	global animation_out
 	global timespan_out
 
+	settings_check()
+	settings = models.Setting.objects.all().first()
+
 	if 'background_color' in request.POST:
-		background_color = request.POST['background_color'].lower()
+		settings.background_color = request.POST['background_color'].lower()
 
 	if 'animation_in' in request.POST:
-		animation_in = request.POST['animation_in']
+		settings.animation_in = request.POST['animation_in']
 
 	if 'timespan_in' in request.POST:
-		timespan_in = request.POST['timespan_in']
+		settings.timespan_in = request.POST['timespan_in']
 
 	if 'animation_out' in request.POST:
-		animation_out = request.POST['animation_out']
+		settings.animation_out = request.POST['animation_out']
 
 	if 'timespan_out' in request.POST:
-		timespan_out = request.POST['timespan_out']
+		settings.timespan_out = request.POST['timespan_out']
+
+	settings.save()
 
 	if len(request.FILES.getlist('background_file')) != 0:
 		path = os.path.join(settings.IMAGES_PATH,'background.jpg')
