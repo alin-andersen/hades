@@ -29,7 +29,7 @@ def page_login(request):
 		if request.user.is_authenticated():
 			if request.GET.get('next') is not None:
 				return redirect(request.GET.get('next'))
-			return redirect('/pages')
+			return redirect('/pages/')
 
 		return TemplateResponse(request,'login.html')
 
@@ -171,7 +171,7 @@ def page_pages_new(request):
 				for chunk in item.chunks():
 					file.write(chunk)
 
-	return redirect('/pages')
+	return redirect('/pages/')
 
 @csrf_exempt
 @require_http_methods(['GET'])
@@ -183,7 +183,7 @@ def page_page_delete(request,uuid):
 		path = os.path.join(settings.IMAGES_PATH,str(page.uuid)+'.jpg')
 		if os.path.isfile(path):
 			os.remove(path)
-	return redirect('/pages')
+	return redirect('/pages/')
 
 @csrf_exempt
 @require_http_methods(['POST'])
@@ -223,7 +223,7 @@ def	page_pages_config(request):
 			for chunk in request.FILES.getlist('background_file')[0].chunks():
 				file.write(chunk)
 
-	return redirect('/pages')
+	return redirect('/pages/')
 
 @csrf_exempt
 @require_http_methods(['GET'])
@@ -233,4 +233,4 @@ def	page_pages_config_background_delete(request):
 	if os.path.isfile(path):
 		os.remove(path)
 
-	return redirect('/pages')
+	return redirect('/pages/')

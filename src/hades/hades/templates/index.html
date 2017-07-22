@@ -44,6 +44,12 @@ function page_next() {
 				animation_out = data.animation_out;
 				timespan_out  = data.timespan_out;
 
+				console.log(background_color);
+				console.log(animation_in);
+				console.log(timespan_in);
+				console.log(animation_out);
+				console.log(timespan_out);
+
 				// set image and background
 				html = "<img src='/image/"+data.uuid+"/' style='height:100%;width:100%;margin:0;'></img>";
 				$('#body').append(html);
