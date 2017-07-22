@@ -48,7 +48,8 @@ function page_next() {
 				html = "<img src='/image/"+data.uuid+"/' style='height:100%;width:100%;margin:0;'></img>";
 				$('#body').append(html);
 				
-				$('#body').css("background-color",background_color);
+				console.log(background_color);
+				$('#body').css("background-color","#"+background_color);
 
 				var obj = $('#body').children().first();
 
